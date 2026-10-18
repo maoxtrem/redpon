@@ -1,5 +1,31 @@
 # HTTPS para redpon.com en Ubuntu
 
+## Proyectos en apps/
+
+Cada proyecto tiene su propia carpeta dentro de `apps/` y un servicio
+independiente en `docker-compose.yml`. La aplicación actual está en
+`apps/redpon/` y se ejecuta en el servicio `redpon`.
+
+```text
+apps/
+  redpon/
+    server.js
+    public/
+      index.html
+```
+
+Para añadir otro proyecto, crea `apps/nombre-proyecto/` y declara un nuevo
+servicio en Compose con su imagen o Dockerfile y su propia carpeta montada.
+Cada contenedor puede utilizar el mismo puerto interno sin conflicto;
+Nginx accede a cada uno por el nombre de su servicio. Añade su dominio y
+certificado al proxy cuando vayas a publicarlo. Crear la carpeta por sí
+solo no inicia un contenedor.
+
+```sh
+sudo docker compose up -d redpon
+sudo docker compose logs -f redpon
+```
+
 ## Servicios internos
 
 MySQL, Mercure y Redis arrancan con Compose. MySQL guarda sus datos en
@@ -29,7 +55,7 @@ cuando se configure esa integración.
 
 Nginx publica los puertos 80 y 443. Las peticiones HTTP redirigen con `301`
 a `https://redpon.com`, conservando la ruta y los parámetros. HTTPS reenvía
-las peticiones a `app:3000`.
+las peticiones a `redpon:3000`.
 
 ## Preparar el servidor
 

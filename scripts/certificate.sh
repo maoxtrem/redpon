@@ -10,7 +10,7 @@ case "${1:-}" in
         else
             set -- --register-unsafely-without-email
         fi
-        docker compose up -d app proxy
+        docker compose up -d redpon proxy
         attempt=0
         until docker compose exec -T proxy nginx -t; do
             attempt=$((attempt + 1))
