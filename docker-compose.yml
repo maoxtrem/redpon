@@ -4,9 +4,29 @@ services:
     container_name: basic-proxy
     ports:
       - "80:80"
+      - "443:443"
     volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx:/etc/nginx/redpon:ro
+      - ./certs:/etc/letsencrypt:ro
+      - ./certs/www:/var/www/certbot:ro
+    command:
+      - /bin/sh
+      - -ec
+      - |
+        if [ -s /etc/letsencrypt/live/redpon.com/fullchain.pem ] && [ -s /etc/letsencrypt/live/redpon.com/privkey.pem ]; then
+          cp /etc/nginx/redpon/nginx.conf /etc/nginx/nginx.conf
+        else
+          cp /etc/nginx/redpon/bootstrap.conf /etc/nginx/nginx.conf
+        fi
+        exec nginx -g 'daemon off;'
     restart: unless-stopped
+
+  certbot:
+    image: certbot/certbot
+    profiles: ["tools"]
+    volumes:
+      - ./certs:/etc/letsencrypt
+      - ./certs/www:/var/www/certbot
 
   app:
     image: node:20-alpine

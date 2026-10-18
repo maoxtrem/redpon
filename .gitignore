@@ -1,2 +1,5 @@
-certs/*.pem
 .vscode
+
+# Certificados, claves privadas y desafíos ACME locales.
+/certs/*
+!/certs/.gitkeep
