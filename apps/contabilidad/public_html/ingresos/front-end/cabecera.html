@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#087f5b">
+    <title>{{TITULO_PAGINA}} | REDPON</title>
+    <link rel="icon" type="image/png" href="/Logo.png">
+    <link rel="stylesheet" href="/home/estilos/cabecera.css">
+    <link rel="stylesheet" href="estilos/cabecera.css">
+    <link rel="stylesheet" href="estilos/cuerpo.css">
+    <link rel="stylesheet" href="estilos/pie.css">
+    <link rel="stylesheet" href="estilos/v.css">
+    <link rel="stylesheet" href="/menu/estilos/menu.css">
+</head>
+<body class="pagina-ingresos menu-oculto">
+<header class="barra-superior">
+    <button class="boton-menu" id="botonMenu" type="button" aria-label="Mostrar u ocultar menú" aria-controls="barraLateral" aria-expanded="false">☰</button>
+    <div class="titulo-superior"><span>{{TITULO_PAGINA}}</span></div>
+    <div class="zona-usuario">
+        <span class="usuario-sesion">Hola, {{NOMBRE_USUARIO}}</span>
+        <a class="marca" href="/home/index.php" aria-label="Inicio REDPON"><img src="/Logo.png" alt="Logo REDPON"></a>
+    </div>
+</header>
+<div class="capa-menu" id="capaMenu" aria-hidden="true"></div>
+<div class="estructura">
+{{MENU_LATERAL}}

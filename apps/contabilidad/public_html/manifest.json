@@ -1,0 +1,18 @@
+{
+    "id": "/",
+    "name": "REDPON",
+    "short_name": "REDPON",
+    "description": "Sistema administrativo para tu negocio",
+    "start_url": "/",
+    "scope": "/",
+    "display": "standalone",
+    "background_color": "#f1fbf7",
+    "theme_color": "#087f5b",
+    "icons": [
+        {
+            "src": "/Logo.png",
+            "sizes": "any",
+            "type": "image/png"
+        }
+    ]
+}

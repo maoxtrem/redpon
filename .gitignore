@@ -5,4 +5,7 @@
 # Certificados, claves privadas y desafíos ACME locales.
 /certs/*
 !/certs/.gitkeep
-old
+old/
+
+# Secretos locales de la aplicación de contabilidad.
+/apps/contabilidad/.env.local

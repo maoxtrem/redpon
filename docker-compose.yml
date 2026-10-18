@@ -38,6 +38,15 @@ services:
     command: ["node", "server.js"]
     restart: unless-stopped
 
+  contabilidad:
+    build:
+      context: ./apps/contabilidad
+    volumes:
+      - ./apps/contabilidad:/var/www/html:ro
+    expose:
+      - "80"
+    restart: unless-stopped
+
   portainer:
     image: portainer/portainer-ce:lts
     command: ["--http-enabled"]

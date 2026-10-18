@@ -1,0 +1,48 @@
+<?php
+header('Content-Type: text/css; charset=UTF-8');
+?>
+/* Botón flotante de acciones rápidas: solo visual por ahora. */
+.boton-flotante-mas {
+    position: fixed;
+    right: max(16px, env(safe-area-inset-right, 0px));
+    bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+    z-index: 1100;
+    display: grid;
+    place-items: center;
+    width: 58px;
+    height: 58px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: #087f5b;
+    color: #fff;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, .24);
+    font: inherit;
+    cursor: pointer;
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+
+.boton-flotante-mas span {
+    display: block;
+    margin-top: -2px;
+    font-size: 34px;
+    font-weight: 400;
+    line-height: 1;
+}
+
+.boton-flotante-mas:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 9px 22px rgba(0, 0, 0, .28);
+}
+
+.boton-flotante-mas:focus-visible {
+    outline: 3px solid #fff;
+    outline-offset: 3px;
+}
+
+@media (max-width: 600px) {
+    .boton-flotante-mas {
+        width: 54px;
+        height: 54px;
+    }
+}

@@ -1,0 +1,26 @@
+</div>
+<footer class="pie-documento">© {{ANIO}} REDPON</footer>
+<script>
+(() => {
+    const boton = document.getElementById('botonMenu');
+    const capa = document.getElementById('capaMenu');
+    const cuerpo = document.body;
+    if (!boton || !capa) return;
+    const cambiarEstado = (abierto) => {
+        cuerpo.classList.toggle('menu-abierto', abierto);
+        cuerpo.classList.toggle('menu-oculto', !abierto);
+        boton.setAttribute('aria-expanded', String(abierto));
+        capa.setAttribute('aria-hidden', String(!abierto));
+    };
+    boton.addEventListener('click', () => cambiarEstado(!cuerpo.classList.contains('menu-abierto')));
+    capa.addEventListener('click', () => cambiarEstado(false));
+    document.addEventListener('keydown', (evento) => {
+        if (evento.key === 'Escape') cambiarEstado(false);
+    });
+})();
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js').catch(() => {});
+}
+</script>
+</body>
+</html>

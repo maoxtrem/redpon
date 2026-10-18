@@ -1,0 +1,98 @@
+<main class="contenido-principal lista-ingresos">
+    <section class="controles-listado" aria-label="Buscar y filtrar ingresos">
+        <label class="campo-busqueda" for="buscarIngreso">
+            <span class="sr-only">Buscar por número o cliente</span>
+            <span class="icono-busqueda" aria-hidden="true">⌕</span>
+            <input id="buscarIngreso" type="search" placeholder="Buscar por documento o cliente" autocomplete="off">
+        </label>
+        <label class="campo-estado" for="filtroEstado">
+            <span>Estado</span>
+            <select id="filtroEstado">
+                <option value="">Todos</option>
+                <option value="pendiente">Pendiente</option>
+                <option value="pagado">Pagado</option>
+                <option value="anulado">Anulado</option>
+            </select>
+        </label>
+        <p class="contador-registros" id="contadorRegistros" aria-live="polite">{{INFO_PAGINACION}}</p>
+    </section>
+
+    <section class="panel-listado" aria-label="Documentos de ingreso">
+        <div class="lista-movil" id="listaMovil">
+            {{LISTA_MOVIL}}
+        </div>
+        <div class="tabla-escritorio">
+            <table class="tabla-ingresos">
+                <caption class="sr-only">Listado de facturas y cuentas de cobro</caption>
+                <thead>
+                    <tr>
+                        <th scope="col">Documento</th>
+                        <th scope="col">Cliente</th>
+                        <th scope="col">Fecha</th>
+                        <th scope="col" class="columna-total">Total</th>
+                        <th scope="col">Estado</th>
+                        <th scope="col" class="columna-acciones"><span class="sr-only">Acciones</span></th>
+                    </tr>
+                </thead>
+                <tbody id="filasTabla">
+                    {{FILAS_TABLA}}
+                </tbody>
+            </table>
+        </div>
+        <div class="sin-resultados" id="sinResultados" hidden>No encontramos ingresos que coincidan con la búsqueda.</div>
+        <nav class="paginacion" aria-label="Paginación de ingresos">
+            <span class="info-paginacion" id="infoPaginacion">{{INFO_PAGINACION}}</span>
+            <div class="controles-paginacion">
+                <button type="button" id="paginaAnterior" aria-label="Página anterior" disabled>Anterior</button>
+                <span id="paginaActual" aria-live="polite">1</span>
+                <button type="button" id="paginaSiguiente" aria-label="Página siguiente" disabled>Siguiente</button>
+            </div>
+        </nav>
+    </section>
+</main>
+<script>
+(() => {
+    const filas = Array.from(document.querySelectorAll('#filasTabla [data-ingreso]'));
+    const filasMovil = Array.from(document.querySelectorAll('#listaMovil [data-ingreso]'));
+    const buscar = document.getElementById('buscarIngreso');
+    const filtro = document.getElementById('filtroEstado');
+    const anterior = document.getElementById('paginaAnterior');
+    const siguiente = document.getElementById('paginaSiguiente');
+    const paginaActual = document.getElementById('paginaActual');
+    const contador = document.getElementById('contadorRegistros');
+    const info = document.getElementById('infoPaginacion');
+    const sinResultados = document.getElementById('sinResultados');
+    const porId = new Map(filasMovil.map((fila) => [fila.dataset.ingreso, fila]));
+    const filasPorPagina = 10;
+    let pagina = 1;
+
+    function actualizar() {
+        const consulta = (buscar.value || '').trim().toLocaleLowerCase('es');
+        const estado = (filtro.value || '').toLocaleLowerCase('es');
+        const encontradas = filas.filter((fila) => {
+            const coincideTexto = (fila.dataset.busqueda || fila.textContent).toLocaleLowerCase('es').includes(consulta);
+            const coincideEstado = !estado || (fila.dataset.estado || '').toLocaleLowerCase('es') === estado;
+            return coincideTexto && coincideEstado;
+        });
+        const paginas = Math.max(1, Math.ceil(encontradas.length / filasPorPagina));
+        pagina = Math.min(pagina, paginas);
+        const inicio = (pagina - 1) * filasPorPagina;
+        const visibles = new Set(encontradas.slice(inicio, inicio + filasPorPagina).map((fila) => fila.dataset.ingreso));
+
+        filas.forEach((fila) => { fila.hidden = !visibles.has(fila.dataset.ingreso); });
+        filasMovil.forEach((fila) => { fila.hidden = !visibles.has(fila.dataset.ingreso); });
+        sinResultados.hidden = encontradas.length !== 0 || filas.length === 0;
+        contador.textContent = `${encontradas.length} ${encontradas.length === 1 ? 'documento' : 'documentos'}`;
+        info.textContent = encontradas.length ? `${inicio + 1}–${Math.min(inicio + filasPorPagina, encontradas.length)} de ${encontradas.length}` : 'Sin registros';
+        paginaActual.textContent = String(pagina);
+        anterior.disabled = pagina <= 1 || encontradas.length === 0;
+        siguiente.disabled = pagina >= paginas || encontradas.length === 0;
+    }
+
+    buscar.addEventListener('input', () => { pagina = 1; actualizar(); });
+    filtro.addEventListener('change', () => { pagina = 1; actualizar(); });
+    anterior.addEventListener('click', () => { if (pagina > 1) { pagina -= 1; actualizar(); } });
+    siguiente.addEventListener('click', () => { pagina += 1; actualizar(); });
+    actualizar();
+})();
+</script>

@@ -1,0 +1,52 @@
+<?php
+header('Content-Type: text/css; charset=UTF-8');
+?>
+/* Contenido principal y botón de inicio de sesión. */
+.boton {
+    display: inline-block;
+    padding: 13px 21px;
+    border: 1px solid var(--verde);
+    border-radius: 999px;
+    text-decoration: none;
+    font-weight: 800;
+    transition: background-color .2s ease, transform .2s ease;
+}
+.boton-principal { color: var(--blanco); background: var(--verde); }
+.boton-principal:hover { background: var(--verde-oscuro); transform: translateY(-1px); }
+.boton:focus-visible { outline: 3px solid var(--lima); outline-offset: 3px; }
+.botones-centro {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 28px;
+}
+.titulo {
+    margin: 0 0 14px;
+    font-size: clamp(25px, 4vw, 50px);
+    line-height: 1.02;
+    letter-spacing: -.06em;
+    text-align: center;
+}
+.parrafo {
+    margin: 0 0 14px;
+    font-size: clamp(15px, 2vw, 22px);
+    line-height: 1.4;
+    text-align: center;
+}
+.contenedor {
+    max-width: 1280px;
+    margin: 20px auto;
+    padding: clamp(22px, 4vw, 42px);
+    border-radius: 28px;
+    color: var(--blanco);
+    background: var(--verde-oscuro);
+    box-shadow: 0 20px 45px rgba(4, 90, 66, .16);
+    text-align: center;
+}
+
+@media (max-width: 600px) {
+    .contenedor { margin: 12px; border-radius: 20px; }
+    .boton { padding: 12px 18px; }
+}

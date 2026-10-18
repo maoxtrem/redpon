@@ -1,0 +1,6 @@
+/* Ajustes del componente compartido; la estructura y el tema se conservan en cada página. */
+.barra-lateral .menu-lateral ul { margin: 0; padding: 0; list-style: none; }
+.barra-lateral .menu-lateral li { list-style: none; }
+.barra-lateral .menu-lateral a.activo { color: #045a42; background: #dff7ed; }
+.barra-lateral .menu-lateral a:focus-visible { outline: 3px solid #78c8ab; outline-offset: 2px; }
+.barra-lateral .menu-lateral .icono { display: inline-block; min-width: 1.45em; text-align: center; }

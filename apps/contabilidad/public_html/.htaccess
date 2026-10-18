@@ -1,0 +1,23 @@
+# Endurecimiento básico del directorio público.
+Options -Indexes
+
+# Bloquea archivos ocultos, credenciales, registros y copias de respaldo.
+<IfModule mod_authz_core.c>
+    <FilesMatch "(?:^\.|^credenciales\.php$|^error_log$|\.(?:log|sql|bak|old|orig|save|swp|tmp|php~)$)">
+        Require all denied
+    </FilesMatch>
+</IfModule>
+<IfModule !mod_authz_core.c>
+    <FilesMatch "(?:^\.|^credenciales\.php$|^error_log$|\.(?:log|sql|bak|old|orig|save|swp|tmp|php~)$)">
+        Order allow,deny
+        Deny from all
+    </FilesMatch>
+</IfModule>
+
+# Cabeceras defensivas. No bloquean manifest.json ni sw.js.
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header always set Strict-Transport-Security "max-age=31536000"
+</IfModule>
