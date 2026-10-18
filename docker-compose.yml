@@ -1,0 +1,21 @@
+services:
+  proxy:
+    image: nginx:alpine
+    container_name: basic-proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./certs:/etc/nginx/certs:ro
+    depends_on:
+      - app
+    restart: unless-stopped
+
+  # Sustituye este servicio por tu aplicación real o cambia proxy_pass.
+  app:
+    image: nginx:alpine
+    expose:
+      - "3000"
+    command: ["/bin/sh", "-c", "sed -i 's/listen       80;/listen       3000;/' /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"]
+    restart: unless-stopped
