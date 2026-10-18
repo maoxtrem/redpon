@@ -1,4 +1,6 @@
 .vscode
+.env
+/data/
 
 # Certificados, claves privadas y desafíos ACME locales.
 /certs/*

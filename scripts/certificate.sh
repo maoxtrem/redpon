@@ -20,9 +20,11 @@ case "${1:-}" in
             fi
             sleep 2
         done
+        docker compose exec -T proxy nginx -s reload
         docker compose run --rm certbot certonly \
             --webroot --webroot-path /var/www/certbot \
             --cert-name redpon.com --domain redpon.com \
+            --domain portainer.redpon.com --expand \
             "$@" --agree-tos --non-interactive
         docker compose restart proxy
         docker compose exec -T proxy nginx -t

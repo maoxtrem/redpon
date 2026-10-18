@@ -1,5 +1,32 @@
 # HTTPS para redpon.com en Ubuntu
 
+## Servicios internos
+
+MySQL, Mercure y Redis arrancan con Compose. MySQL guarda sus datos en
+`./data/mysql` del anfitrión (`/root/redpon/data/mysql` en este VPS), montada
+en `/var/lib/mysql` del contenedor y excluida de Git. Conserva esta carpeta
+entre despliegues. Mercure y Redis utilizan volúmenes de Docker.
+No publican puertos en el VPS ni tienen rutas en Nginx.
+Sus direcciones dentro de la red de Compose son `mysql:3306`,
+`http://mercure:80` y `redis:6379`. La aplicación todavía no los utiliza.
+
+Las contraseñas y claves JWT están en `.env`, excluido de Git. Para un
+despliegue nuevo, copia `.env.example` a `.env` y completa todos los secretos
+con valores diferentes (por ejemplo, usando `openssl rand -hex 32`).
+MySQL crea la base `redpon` y el usuario `redpon` en su primer arranque;
+las variables de inicialización no cambian credenciales de una base existente.
+
+```sh
+sudo docker compose up -d mysql mercure redis
+sudo docker compose ps
+```
+
+Mercure utiliza la [imagen oficial](https://mercure.rocks/docs/deployment/docker)
+con claves JWT propias y HTTP interno; Nginx gestionará su acceso público
+cuando se configure esa integración.
+
+## Proxy HTTPS
+
 Nginx publica los puertos 80 y 443. Las peticiones HTTP redirigen con `301`
 a `https://redpon.com`, conservando la ruta y los parámetros. HTTPS reenvía
 las peticiones a `app:3000`.
@@ -16,8 +43,17 @@ Necesitas Docker Engine con el complemento `docker compose` en Ubuntu.
    `sudo ufw allow 443/tcp`.
 3. Comprueba que ningún otro servicio del servidor ocupa esos puertos.
 
-Esta configuración cubre únicamente `redpon.com`; no solicita un certificado
-para `www.redpon.com`.
+El certificado cubre `redpon.com` y `portainer.redpon.com`. Ambos registros
+DNS deben apuntar al VPS. No se incluye `www.redpon.com`.
+
+## Portainer
+
+Portainer se administra desde `https://portainer.redpon.com`, mediante Nginx
+con soporte para WebSocket. El certificado compartido incluye ambos dominios.
+Compose reutiliza el volumen externo existente `portainer_data`, conservando
+los usuarios y la configuración. No publica el puerto 9443 en el VPS.
+En un servidor nuevo, crea primero el volumen con
+`sudo docker volume create portainer_data`.
 
 ## Emitir el certificado y activar HTTPS
 
